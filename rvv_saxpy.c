@@ -76,6 +76,9 @@ int main() {
       printf("fail, %f=!%f\n", output_golden[i], output[i]);
       pass = 0;
     }
+    else{
+       printf("pass, %f == %f\n", output_golden[i], output[i]);
+    }
   }
   if (pass)
     printf("pass\n");
