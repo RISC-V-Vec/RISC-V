@@ -52,7 +52,18 @@ void saxpy_golden(size_t n, const float a, const float *x, float *y) {
 // reference https://github.com/riscv/riscv-v-spec/blob/master/example/saxpy.s
 void saxpy_vec(size_t n, const float a, const float *x, float *y) {
   for (size_t vl; n > 0; n -= vl, x += vl, y += vl) {
+    // vsetvli allows for stripmining, The application specifies the total number of elements to be processed (the application vector length or AVL) as a candidate value for vl, 
+    // and the hardware responds via a general-purpose register with the (frequently smaller) number of elements that the hardware will handle per iteration  
+    
+    // e32 -> element width 32 (float)
+    // m1 -> LMUL size 8
+    // expected VL -> 128/32-> 4 * 1
+    vl = __riscv_vsetvl_e32m1(n); 
+    printf("%ld\n", vl);
+    // e32 -> element width 32 (float)
+    // m8 -> LMUL size 8
     vl = __riscv_vsetvl_e32m8(n);
+    printf("%ld\n", vl);
     vfloat32m8_t vx = __riscv_vle32_v_f32m8(x, vl);
     vfloat32m8_t vy = __riscv_vle32_v_f32m8(y, vl);
     __riscv_vse32_v_f32m8(y, __riscv_vfmacc_vf_f32m8(vy, a, vx, vl), vl);
@@ -75,9 +86,6 @@ int main() {
     if (!fp_eq(output_golden[i], output[i], 1e-6)) {
       printf("fail, %f=!%f\n", output_golden[i], output[i]);
       pass = 0;
-    }
-    else{
-       printf("pass, %f == %f\n", output_golden[i], output[i]);
     }
   }
   if (pass)
