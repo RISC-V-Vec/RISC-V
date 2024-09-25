@@ -69,6 +69,8 @@ void saxpy_vec(size_t n, const float a, const float *x, float *y) {
     // __riscv_vle32_v_f32m8 -> __riscv is the prefix that is always present, vle -> vector strided load of SEW 32 LMUL 8, base addr + number of elements to read
     vfloat32m8_t vx = __riscv_vle32_v_f32m8(x, vl);
     vfloat32m8_t vy = __riscv_vle32_v_f32m8(y, vl);
+    // print the vector content
+    for (size_t i = 0; i < vl; ++i) printf("%f ", __riscv_vfmv_f_s_f32m8_f32(__riscv_vslidedown_vx_f32m8(vx, i, vl)))
     // __riscv_vfmacc_vf_f32m8 -> multiply + accumulate aka fmadd, as always e32 for floats32 and m8 aka lmul 8 
     // https://dzaima.github.io/intrinsics-viewer/#0q1YqVbJSKsosTtYtU9JRSoVzFMvSchOTk@PL0uLTjI1yLYCSiUpW0UplSrE6SskgFohRDFQfHw/SURaPqSETKGsIAkq1AA
 

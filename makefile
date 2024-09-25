@@ -1,2 +1,2 @@
 all:
-	riscv64-linux-gnu-gcc -march=rv64gcv -static rvv_matmul.c -o matmul
+	riscv64-linux-gnu-gcc -march=rv64gcv -static rvv_saxpy.c -o saxpy
