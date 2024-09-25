@@ -13,6 +13,11 @@ void gen_rand_1d(double *a, int n) {
     a[i] = (double)rand() / (double)RAND_MAX + (double)(rand() % 1000);
 }
 
+void gen_rand_1d_int(int *a, int n) {
+  for (int i = 0; i < n; ++i)
+    a[i] = rand();
+}
+
 void gen_string(char *s, int n) {
   // char value range: -128 ~ 127
   for (int i = 0; i < n - 1; ++i)
@@ -43,6 +48,12 @@ void print_array_1d(double *a, int n, const char *type, const char *name) {
       puts("");
   }
   puts("");
+}
+
+void print_array_1d_int(int *a, int n) {
+  for (int i = 0; i < n; ++i) {
+    printf("%d ", a[i]);
+  }
 }
 
 void print_array_2d(double **a, int n, int m, const char *type,
