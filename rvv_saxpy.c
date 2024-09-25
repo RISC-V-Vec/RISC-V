@@ -57,15 +57,22 @@ void saxpy_vec(size_t n, const float a, const float *x, float *y) {
     
     // e32 -> element width 32 (float)
     // m1 -> LMUL size 8
-    // expected VL -> 128/32-> 4 * 1
+    // expected VL -> VLEN/32-> 4 locally, 8 on bananapi
     vl = __riscv_vsetvl_e32m1(n); 
     printf("%ld\n", vl);
     // e32 -> element width 32 (float)
     // m8 -> LMUL size 8
+    // expected VL -> VLEN/32 * 8, 32 (31) locally, still 31 on bananapi because we are capped at n 
     vl = __riscv_vsetvl_e32m8(n);
     printf("%ld\n", vl);
+    // vfloat32m8_t is the datatype for a vector of float32 with EMUL = 8
+    // __riscv_vle32_v_f32m8 -> __riscv is the prefix that is always present, vle -> vector strided load of SEW 32 LMUL 8, base addr + number of elements to read
     vfloat32m8_t vx = __riscv_vle32_v_f32m8(x, vl);
     vfloat32m8_t vy = __riscv_vle32_v_f32m8(y, vl);
+    // __riscv_vfmacc_vf_f32m8 -> multiply + accumulate aka fmadd, as always e32 for floats32 and m8 aka lmul 8 
+    // https://dzaima.github.io/intrinsics-viewer/#0q1YqVbJSKsosTtYtU9JRSoVzFMvSchOTk@PL0uLTjI1yLYCSiUpW0UplSrE6SskgFohRDFQfHw/SURaPqSETKGsIAkq1AA
+
+    // store into y the result of a fmadd with a * vx + vy
     __riscv_vse32_v_f32m8(y, __riscv_vfmacc_vf_f32m8(vy, a, vx, vl), vl);
   }
 }
