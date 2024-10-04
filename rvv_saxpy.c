@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #include <riscv_vector.h>
 
 #define N 512
