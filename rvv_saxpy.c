@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <math.h>
-#include <time.h>
+#include <sys/time.h>
 #include "common.h"
 #include <string.h>
 #include <riscv_vector.h>
