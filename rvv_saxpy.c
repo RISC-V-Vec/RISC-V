@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <math.h>
-#include <sys/time.h>
+#include <time.h>
 #include "common.h"
 #include <string.h>
 #include <riscv_vector.h>
@@ -54,7 +54,7 @@ void saxpy_vec(size_t n, const float a, const float *x, float *y)
   double time_spent = (end.tv_sec - start.tv_sec) +
                       (end.tv_nsec - start.tv_nsec);
 
-  printf("Time elpased is %f ns\n", time_spent);
+  printf("Time elpased is %d ns\n", time_spent);
 }
 
 void saxpy_SLA(size_t n, const float a, const float *x, float *y)
@@ -82,7 +82,7 @@ void saxpy_SLA(size_t n, const float a, const float *x, float *y)
   double time_spent = (end.tv_sec - start.tv_sec) +
                       (end.tv_nsec - start.tv_nsec);
 
-  printf("Time elpased is %f ns\n", time_spent);
+  printf("Time elpased is %d ns\n", time_spent);
 }
 
 int fp_eq(float reference, float actual, float relErr)
