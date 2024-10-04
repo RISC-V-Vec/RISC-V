@@ -97,7 +97,7 @@ int main()
   // Initialize arrays
   gen_rand_1d_float(input, N);
   gen_rand_1d_float(output, N);
-  memcpy(output_golden, output, N);
+  memcpy(output_golden, output, sizeof(float) * N);
   saxpy_vec(N, 55.66, input, output_golden);
   saxpy_SLA(N, 55.66, input, output);
   int pass = 1;
