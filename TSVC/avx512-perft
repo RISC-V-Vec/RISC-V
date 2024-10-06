@@ -1,0 +1,17 @@
+Performance counter stats for './tsvc-vec-avx512':
+
+326,718.16 msec task-clock                       #    1.000 CPUs utilized             
+2,100      context-switches                 #    6.428 /sec                      
+102      cpu-migrations                   #    0.312 /sec                      
+841      page-faults                      #    2.574 /sec                      
+1,743,791,017,674      cycles                           #    5.337 GHz                       
+8,584,419,951      stalled-cycles-frontend          #    0.49% frontend cycles idle      
+3,407,582,745,411      instructions                     #    1.95  insn per cycle            
+#    0.00  stalled cycles per insn   
+446,414,783,384      branches                         #    1.366 G/sec                     
+410,352,222      branch-misses                    #    0.09% of all branches           
+
+326.731436794 seconds time elapsed
+
+326.538762000 seconds user
+0.178996000 seconds sys
