@@ -1,0 +1,3 @@
+get istructions per function:
+perf record -e instructions
+perf script -i perf.data > perf.data.txt
