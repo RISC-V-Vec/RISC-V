@@ -5,3 +5,6 @@ scalar :
 
 vector:
 	$(CC) -O3 -Ofast -march=rv64gcv -static  dummy.c tsc.c -lm -o tsvc-vec
+
+VLS:
+	clang -mrvv-vector-bits=256 -O3 -Ofast -march=rv64gcv -static  dummy.c tsc.c -lm -o tsvc-vec
