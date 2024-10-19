@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <riscv_vector.h>
 
 void pow2fill(int **ar, int n, int m)
 {
@@ -38,4 +39,10 @@ void print2darray(int **ar, int n, int m)
             printf("%d ", ar[i][j]);
         printf("\n");
     }
+}
+
+void printvectorcontent(int vl, vint32m1_t v)
+{
+    for (size_t i = 0; i < vl; ++i)
+        printf("%d ", __riscv_vmv_x_s_i32m1_i32(__riscv_vslidedown_vx_i32m1(v, i, vl)));
 }
