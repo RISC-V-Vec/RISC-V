@@ -1,4 +1,6 @@
 #include "utils.h"
+#define USE_32BIT_INT
+#include "defines.h"
 #include <riscv_vector.h>
 
 const int SIZE = 256;
@@ -17,10 +19,10 @@ void relu(int *V, int *V2, int size)
     for (size_t vl; size > 0; size -= vl, V += vl, V2 += vl)
     {
         vl = __riscv_vsetvl_e32m1(size);
-        vint32m1_t zero_vector = __riscv_vmv_v_x_i32m1(0, vl);
-        vint32m1_t raw_values = __riscv_vle32_v_i32m1(V, vl);
-        vint32m1_t relu_values = __riscv_vmax_vv_i32m1(raw_values, zero_vector, vl);
-        __riscv_vse32_v_i32m1(V2, relu_values, vl);
+        vec zero_vector = zero_init(vl);
+        vec raw_values = vec_load(V, vl);
+        vec relu_values = vec_max(raw_values, zero_vector, vl);
+        vec_store(V2, relu_values, vl);
     }
 }
 
