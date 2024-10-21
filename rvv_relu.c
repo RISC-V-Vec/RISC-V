@@ -15,11 +15,11 @@ void relu_golden(int *V, int *V2, int size)
 
 void relu(int *V, int *V2, int size)
 {
-
+    size_t vlmax = __riscv_vsetvlmax_e32m1();
+    vec zero_vector = zero_init(vlmax);
     for (size_t vl; size > 0; size -= vl, V += vl, V2 += vl)
     {
         vl = __riscv_vsetvl_e32m1(size);
-        vec zero_vector = zero_init(vl);
         vec raw_values = vec_load(V, vl);
         vec relu_values = vec_max(raw_values, zero_vector, vl);
         vec_store(V2, relu_values, vl);
@@ -30,7 +30,6 @@ int main()
 {
     uint32_t seed = 0xdeadbeef;
     srand(seed);
-
     int V[SIZE];
     int golden[SIZE];
     int actual[SIZE];
