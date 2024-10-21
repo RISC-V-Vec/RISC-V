@@ -71,7 +71,7 @@ void matmul_shift(int **a, int **b, int **c, int n, int m, int o)
 
         vint32m1_t vec_a = __riscv_vle32_v_i32m1(ptr_a, vl);
         vuint32m1_t vec_b = __riscv_vle32_v_i32m1(ptr_b, vl);
-        // Problem 1: convert the values of vec_b into indexes for a shiff and into an unsigned vec
+        // Problem 1: convert the values of vec_b into indexes for a shif and into an unsigned vec
         // Problem 2: even assuming we get the shift indexes, we don't have a macc equivalent, so we'll need 2 operations
 
         vint32m1_t vec_mul = __riscv_vsll_vv_i32m1(vec_a, vec_b, vl);
@@ -102,7 +102,7 @@ int main()
   // compute
   int **golden = alloc_array_2d(N, M);
   int **actual = alloc_array_2d(N, M);
-  matmul(A, B, golden, N, M, O);
+  matmul_golden(A, B, golden, N, M, O);
 
   // Workaround for the log problem
   preprocessVecB(B, M, O);

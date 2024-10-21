@@ -110,24 +110,6 @@ bool compare_string(const char *golden, const char *actual, int n)
   return true;
 }
 
-bool compare_2d(double **golden, double **actual, int n, int m)
-{
-  for (int i = 0; i < n; ++i)
-    for (int j = 0; j < m; ++j)
-      if (!double_eq(golden[i][j], actual[i][j], 1e-6))
-        return false;
-  return true;
-}
-
-double **alloc_array_2d(int n, int m)
-{
-  double **ret;
-  ret = (double **)malloc(sizeof(double *) * n);
-  for (int i = 0; i < n; ++i)
-    ret[i] = (double *)malloc(sizeof(double) * m);
-  return ret;
-}
-
 void init_array_one_1d(double *ar, int n)
 {
   for (int i = 0; i < n; ++i)

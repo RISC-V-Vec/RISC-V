@@ -41,6 +41,23 @@ void print2darray(int **ar, int n, int m)
     }
 }
 
+void fillArray1d(int *V, int size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        V[i] = rand() - rand();
+    }
+}
+
+void printArray1d(int *V, int size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        printf("%d ", V[i]);
+    }
+    printf("\n");
+}
+
 void printvectorcontent(int vl, vint32m1_t v)
 {
     for (size_t i = 0; i < vl; ++i)
