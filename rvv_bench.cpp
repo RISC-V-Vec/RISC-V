@@ -5,78 +5,98 @@
 #define USE_32BIT_INT
 #include "defines.h"
 
+constexpr int RUNS = 256;
+
 // Function to add vectors using RVV intrinsics
 void vector_add_rvv(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    size_t vl;
-    for (size_t i = 0; i < n; i += vl)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        vl = get_vl(n - i);
-        vec va = vec_load(&a[i], vl);
-        vec vb = vec_load(&b[i], vl);
-        vec vc = vec_add(va, vb, vl);
-        vec_store(&c[i], vc, vl);
+        size_t n = a.size();
+        size_t vl;
+        for (size_t i = 0; i < n; i += vl)
+        {
+            vl = get_vl(n - i);
+            vec va = vec_load(&a[i], vl);
+            vec vb = vec_load(&b[i], vl);
+            vec vc = vec_add(va, vb, vl);
+            vec_store(&c[i], vc, vl);
+        }
     }
 }
 
 // Function to add vectors using scalar operations
 void vector_add_scalar(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        c[i] = a[i] + b[i];
+        size_t n = a.size();
+        for (size_t i = 0; i < n; ++i)
+        {
+            c[i] = a[i] + b[i];
+        }
     }
 }
 
 // Function to mul vectors using RVV intrinsics
 void vector_mul_rvv(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    size_t vl;
-    for (size_t i = 0; i < n; i += vl)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        vl = get_vl(n - i);
-        vec va = vec_load(&a[i], vl);
-        vec vb = vec_load(&b[i], vl);
-        vec vc = vec_mul(va, vb, vl);
-        vec_store(&c[i], vc, vl);
+        size_t n = a.size();
+        size_t vl;
+        for (size_t i = 0; i < n; i += vl)
+        {
+            vl = get_vl(n - i);
+            vec va = vec_load(&a[i], vl);
+            vec vb = vec_load(&b[i], vl);
+            vec vc = vec_mul(va, vb, vl);
+            vec_store(&c[i], vc, vl);
+        }
     }
 }
 
 // Function to add vectors using scalar operations
 void vector_mul_scalar(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        c[i] = a[i] * b[i];
+        size_t n = a.size();
+        for (size_t i = 0; i < n; ++i)
+        {
+            c[i] = a[i] * b[i];
+        }
     }
 }
 
 // Function to add vectors using RVV intrinsics
 void vector_shift_rvv(const std::vector<data_type> &a, const std::vector<shift_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    size_t vl;
-    for (size_t i = 0; i < n; i += vl)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        vl = get_vl(n - i);
-        vec va = vec_load(&a[i], vl);
-        shift_vec vb = shift_vec_load(&b[i], vl);
-        vec vc = vec_shift(va, vb, vl);
-        vec_store(&c[i], vc, vl);
+        size_t n = a.size();
+        size_t vl;
+        for (size_t i = 0; i < n; i += vl)
+        {
+            vl = get_vl(n - i);
+            vec va = vec_load(&a[i], vl);
+            shift_vec vb = shift_vec_load(&b[i], vl);
+            vec vc = vec_shift(va, vb, vl);
+            vec_store(&c[i], vc, vl);
+        }
     }
 }
 
 // Function to add vectors using scalar operations
 void vector_shift_scalar(const std::vector<data_type> &a, const std::vector<shift_type> &b, std::vector<data_type> &c)
 {
-    size_t n = a.size();
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < RUNS; i++)
     {
-        c[i] = a[i] << b[i];
+        size_t n = a.size();
+        for (size_t i = 0; i < n; ++i)
+        {
+            c[i] = a[i] << b[i];
+        }
     }
 }
 
