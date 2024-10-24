@@ -41,14 +41,6 @@ void print2darray(int **ar, int n, int m)
     }
 }
 
-void fillArray1d(int *V, int size)
-{
-    for (size_t i = 0; i < size; i++)
-    {
-        V[i] = rand() - rand();
-    }
-}
-
 void printArray1d(int *V, int size)
 {
     for (size_t i = 0; i < size; i++)

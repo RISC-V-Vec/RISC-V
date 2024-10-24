@@ -5,7 +5,7 @@
 #define USE_32BIT_INT
 #include "defines.h"
 
-constexpr int RUNS = 256;
+constexpr int RUNS = 1024;
 
 // Function to add vectors using RVV intrinsics
 void vector_add_rvv(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
