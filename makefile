@@ -1,2 +1,2 @@
 all:
-	riscv64-linux-gnu-gcc -O3 -Ofast -march=rv64gcv rvv_relu.c -lm -static
+	riscv64-unknown-linux-gnu-g++ -O3 -march=rv64gcv rvv_add_fast.cpp -lm -static 
