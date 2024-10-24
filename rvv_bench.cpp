@@ -2,24 +2,26 @@
 #include <vector>
 #include <chrono>
 #include <riscv_vector.h>
+#define USE_32BIT_INT
+#include "defines.h"
 
 // Function to add vectors using RVV intrinsics
-void vector_add_rvv(const std::vector<int32_t> &a, const std::vector<int32_t> &b, std::vector<int32_t> &c)
+void vector_add_rvv(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     size_t vl;
     for (size_t i = 0; i < n; i += vl)
     {
-        vl = __riscv_vsetvl_e32m1(n - i);
-        vint32m1_t va = __riscv_vle32_v_i32m1(&a[i], vl);
-        vint32m1_t vb = __riscv_vle32_v_i32m1(&b[i], vl);
-        vint32m1_t vc = __riscv_vadd_vv_i32m1(va, vb, vl);
-        __riscv_vse32_v_i32m1(&c[i], vc, vl);
+        vl = get_vl(n - i);
+        vec va = vec_load(&a[i], vl);
+        vec vb = vec_load(&b[i], vl);
+        vec vc = vec_add(va, vb, vl);
+        vec_store(&c[i], vc, vl);
     }
 }
 
 // Function to add vectors using scalar operations
-void vector_add_scalar(const std::vector<int32_t> &a, const std::vector<int32_t> &b, std::vector<int32_t> &c)
+void vector_add_scalar(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     for (size_t i = 0; i < n; ++i)
@@ -28,23 +30,23 @@ void vector_add_scalar(const std::vector<int32_t> &a, const std::vector<int32_t>
     }
 }
 
-// Function to add vectors using RVV intrinsics
-void vector_mul_rvv(const std::vector<int32_t> &a, const std::vector<int32_t> &b, std::vector<int32_t> &c)
+// Function to mul vectors using RVV intrinsics
+void vector_mul_rvv(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     size_t vl;
     for (size_t i = 0; i < n; i += vl)
     {
-        vl = __riscv_vsetvl_e32m1(n - i);
-        vint32m1_t va = __riscv_vle32_v_i32m1(&a[i], vl);
-        vint32m1_t vb = __riscv_vle32_v_i32m1(&b[i], vl);
-        vint32m1_t vc = __riscv_vmul_vv_i32m1(va, vb, vl);
-        __riscv_vse32_v_i32m1(&c[i], vc, vl);
+        vl = get_vl(n - i);
+        vec va = vec_load(&a[i], vl);
+        vec vb = vec_load(&b[i], vl);
+        vec vc = vec_mul(va, vb, vl);
+        vec_store(&c[i], vc, vl);
     }
 }
 
 // Function to add vectors using scalar operations
-void vector_mul_scalar(const std::vector<int32_t> &a, const std::vector<int32_t> &b, std::vector<int32_t> &c)
+void vector_mul_scalar(const std::vector<data_type> &a, const std::vector<data_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     for (size_t i = 0; i < n; ++i)
@@ -54,22 +56,22 @@ void vector_mul_scalar(const std::vector<int32_t> &a, const std::vector<int32_t>
 }
 
 // Function to add vectors using RVV intrinsics
-void vector_shift_rvv(const std::vector<int32_t> &a, const std::vector<uint32_t> &b, std::vector<int32_t> &c)
+void vector_shift_rvv(const std::vector<data_type> &a, const std::vector<shift_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     size_t vl;
     for (size_t i = 0; i < n; i += vl)
     {
-        vl = __riscv_vsetvl_e32m1(n - i);
-        vint32m1_t va = __riscv_vle32_v_i32m1(&a[i], vl);
-        vuint32m1_t vb = __riscv_vle32_v_u32m1(&b[i], vl);
-        vint32m1_t vc = __riscv_vsll_vv_i32m1(va, vb, vl);
-        __riscv_vse32_v_i32m1(&c[i], vc, vl);
+        vl = get_vl(n - i);
+        vec va = vec_load(&a[i], vl);
+        shift_vec vb = shift_vec_load(&b[i], vl);
+        vec vc = vec_shift(va, vb, vl);
+        vec_store(&c[i], vc, vl);
     }
 }
 
 // Function to add vectors using scalar operations
-void vector_shift_scalar(const std::vector<int32_t> &a, const std::vector<uint32_t> &b, std::vector<int32_t> &c)
+void vector_shift_scalar(const std::vector<data_type> &a, const std::vector<shift_type> &b, std::vector<data_type> &c)
 {
     size_t n = a.size();
     for (size_t i = 0; i < n; ++i)
@@ -79,7 +81,7 @@ void vector_shift_scalar(const std::vector<int32_t> &a, const std::vector<uint32
 }
 
 // Function to verify the results of scalar and RVV methods
-void verify_results(const std::vector<int32_t> &scalar_result, const std::vector<int32_t> &rvv_result)
+void verify_results(const std::vector<data_type> &scalar_result, const std::vector<data_type> &rvv_result)
 {
     if (scalar_result == rvv_result)
     {
@@ -94,7 +96,7 @@ void verify_results(const std::vector<int32_t> &scalar_result, const std::vector
 int main()
 {
     const size_t N = 1000000; // Size of the vectors
-    std::vector<int32_t> a(N, 1), b(N, 2), c_rvv(N, 0), c_scalar(N, 0);
+    std::vector<data_type> a(N, 1), b(N, 2), c_rvv(N, 0), c_scalar(N, 0);
 
     // Measure time for RVV vector addition
     auto start_rvv = std::chrono::high_resolution_clock::now();
@@ -131,7 +133,7 @@ int main()
     verify_results(c_scalar, c_rvv);
 
     // For shifts get an unsigned vector
-    std::vector<uint32_t> shifts(N, 2);
+    std::vector<shift_type> shifts(N, 2);
 
     // Measure time for RVV vector shift
     start_rvv = std::chrono::high_resolution_clock::now();
@@ -146,6 +148,9 @@ int main()
     end_scalar = std::chrono::high_resolution_clock::now();
     duration_scalar = end_scalar - start_scalar;
     std::cout << "Scalar Vector Shift Time: " << duration_scalar.count() << " seconds" << std::endl;
+
+    // Verify results
+    verify_results(c_scalar, c_rvv);
 
     return 0;
 }
